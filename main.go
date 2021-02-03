@@ -1,15 +1,11 @@
 package main
 
 import (
-	"context"
 	. "fmt"
 	"github.com/gin-gonic/gin"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
-	"log"
 	"net/http"
-	"os"
-	"os/signal"
 	"time"
 )
 
@@ -100,12 +96,12 @@ func (b Book) TableName() string {
 
 func main() {
 	//CreateTable()
-	r := setupRouter()
+	//r := setupRouter()
 	// Listen and Server in 0.0.0.0:8080
 	/*err := r.Run(":8080")
 	panic(err)*/
 	//r := gin.Default()
-	r.GET("/", func(c *gin.Context) {
+	/*r.GET("/", func(c *gin.Context) {
 		time.Sleep(5 * time.Second)
 		c.String(http.StatusOK, "Welcome Gin Server")
 	})
@@ -132,5 +128,5 @@ func main() {
 		log.Fatal("Server ShutDown:", err)
 	}
 
-	log.Println("Server exiting")
+	log.Println("Server exiting")*/
 }

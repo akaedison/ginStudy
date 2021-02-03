@@ -1,0 +1,12 @@
+Database:
+  DBType: mysql
+  UserName: root
+  Password: zm159539
+  Host: 47.96.24.50:3306
+  DbName: go
+  Charset: utf8
+Server:
+  RunMode: debug
+  HttpPort: 8080
+  ReadTimeout: 60
+  WriteTimeout: 60
