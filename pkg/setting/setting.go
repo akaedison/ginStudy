@@ -1,47 +1,50 @@
 package setting
 
-import "github.com/spf13/viper"
+import (
+	"fmt"
+	"gopkg.in/yaml.v3"
+	"io/ioutil"
+)
 
-type Setting struct {
-	vp *viper.Viper
+var (
+	Config *Conf
+)
+
+/*type Server struct {
+	Port			string 			`yaml:"port"`
+	ReadTimeout		time.Duration	`yaml:"read-timeout"`
+	WriteTimeout	time.Duration	`yaml:"write-timeout"`
+}*/
+
+type Database struct {
+	Type     string `yaml:"type"`
+	User     string `yaml:"user"`
+	Password string `yaml:"password"`
+	Host     string `yaml:"host"`
+	Name     string `yaml:"name"`
+	CharSet  string `yaml:"charset"`
 }
 
-var sections = make(map[string]interface{})
+type Conf struct {
+	/*Server Server `yaml:"server"`*/
+	Database Database `yaml:"database"`
+}
 
-//读取配置
-func NewSetting() (*Setting, error) {
-	vp := viper.New()
-	vp.SetConfigName("config")
-	vp.SetConfigFile("config")
-	vp.SetConfigType("yaml")
-	err := vp.ReadInConfig()
+func init() {
+	Config = getConf()
+	fmt.Println("配置初始化成功")
+}
+
+func getConf() *Conf {
+	var c *Conf
+	filePath := "./config/config.yaml"
+	file, err := ioutil.ReadFile(filePath)
 	if err != nil {
-		return nil, err
+		fmt.Println("读取文件错误")
 	}
-
-	s := &Setting{vp}
-	return s, nil
-}
-
-//读取指定的一段
-func (s *Setting) ReadSection(k string, v interface{}) error {
-	err := s.vp.UnmarshalKey(k, v)
+	err = yaml.Unmarshal(file, &c)
 	if err != nil {
-		return err
+		fmt.Println("读取配置错误")
 	}
-
-	if _, ok := sections[k]; !ok {
-		sections[k] = v
-	}
-	return nil
-}
-
-func (s *Setting) ReloadAllSection() error {
-	for k, v := range sections {
-		err := s.ReadSection(k, v)
-		if err != nil {
-			return err
-		}
-	}
-	return nil
+	return c
 }
